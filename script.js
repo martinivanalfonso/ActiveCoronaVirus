@@ -18,25 +18,25 @@ function getDataModal(country) {
 
 // Countries
 
-function getNine() {
-let topNine = []
+function getCountries() {
+let topCountries = []
 const countries = getData()
 countries.then(data => {
     for (const country of data) {
-        topNine.push(country)
+        topCountries.push(country)
         }  
-topNine = topNine.sort(function(a, b) { 
+topCountries = topCountries.sort(function(a, b) { 
     if (a.active > b.active) return -1;
-    if (b.active > a.active) return 1;}).slice(0,9)
-    console.log(topNine)
-    renderNine(topNine)
+    if (b.active > a.active) return 1;}).slice(0,15)
+    console.log(topCountries)
+    renderCountries(topCountries)
 
 })
 }
 
 
-const renderNine = (topNine) => {
-    topNine.forEach( (element, index) => {
+const renderCountries = (topCountries) => {
+    topCountries.forEach( (element, index) => {
        const div = document.createElement('div')
        let className = ""
        if (index < 3) {
@@ -50,8 +50,8 @@ const renderNine = (topNine) => {
        <div class="card text-white bg-${className} mb-3" style="max-width: 20rem;">
        <div class="card-header">${element.country}</div>
        <div class="card-body">
-         <h4 class="card-title">Active cases: <strong>${element.active}</strong></h4>
-         <a href="http://www.youtube.com/results?search_query=${element.country}+coronavirus"><button type="button" class="btn btn-dark mt-5">News </button></a>
+         <h4 class="card-title">Active cases:<br><strong>${element.active}</strong></h4>
+         <a href="http://www.youtube.com/results?search_query=${element.country}+coronavirus" target="_blank"><button type="button" class="btn btn-dark mt-5">News </button></a>
          <button type="button" data-country="${element.country}" class="btn btn-secondary mt-5"" onclick="openModal(this)">More Details</button>
 
        </div>
@@ -112,4 +112,4 @@ function closeModal(){
 
 // Initiate countries
 
-addEventListener('DOMContentLoaded', getNine())
+addEventListener('DOMContentLoaded', getCountries())
