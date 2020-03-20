@@ -1,3 +1,8 @@
+*, *::after, *::before {
+    box-sizing: border-box;
+    color: white;
+}
+
 body {
     background: linear-gradient(to left,#00AAFF, #00FF6C);
 }
@@ -25,10 +30,61 @@ body {
     padding: 2rem;
 }
 
+  .modal-show {
+      position: fixed;
+      z-index: 10;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 60%;
+  }
+
+  #overlay {
+    position: fixed;
+    opacity: 0;
+    transition: 200ms ease-in-out;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, .5);
+    pointer-events: none;
+  }
+  
+  #overlay.active {
+    opacity: 1;
+    pointer-events: all;
+  }#overlay {
+  position: fixed;
+  opacity: 0;
+  transition: 200ms ease-in-out;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, .5);
+  pointer-events: none;
+}
+
+#overlay.active {
+  opacity: 1;
+  pointer-events: all;
+}
+
+.modal-content {
+    padding: 2rem;
+    font-size: 1.3rem;
+
+}
+
 @media screen and (max-width: 600px) {
 
   
     .content {
         display: block;
+    }
+
+    .modal-show {
+        width: 90%;
     }
   }
