@@ -36,7 +36,7 @@ function renderNine(topNine) {
        <div class="card-header">${element.country}</div>
        <div class="card-body">
          <h4 class="card-title">Active cases: <strong>${element.active}</strong></h4>
-         <a href="youtube.com/results?search_query=${element.country}+coronavirus"><button type="button" class="btn btn-dark mt-5">News </button></a>
+         <a href="http://www.youtube.com/results?search_query=${element.country}+coronavirus"><button type="button" class="btn btn-dark mt-5">News </button></a>
        </div>
      </div>
        `
