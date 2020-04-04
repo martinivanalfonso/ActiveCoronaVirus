@@ -1,52 +1,40 @@
-const content = document.getElementById('content')
-const overlay = document.getElementById('overlay')
+// Fetching API
+const getData = async (country) => {
+  let link = "https://corona.lmao.ninja/countries/";
+  if (country) link += country;
 
-// API Requests
-function getData() {
-    return fetch("https://corona.lmao.ninja/countries")
-    .then(response => response.json())
-
-}
-
-function getDataModal(country) {
-    let link = "https://corona.lmao.ninja/countries/"
-    link += country
-    return fetch(link)
-    .then(response => response.json())
-
-}
+  const response = await fetch(link);
+  return response.json();
+};
 
 // Countries
 
-function getCountries() {
-let topCountries = []
-const countries = getData()
-countries.then(data => {
-    for (const country of data) {
-        topCountries.push(country)
-        }  
-topCountries = topCountries.sort(function(a, b) { 
-    if (a.active > b.active) return -1;
-    if (b.active > a.active) return 1;}).slice(0,15)
-    console.log(topCountries)
-    renderCountries(topCountries)
+const getCountries = (number) => {
+  if (!number) number = 15;
+  getData().then((data) => {
+    const sortedCountries = Object.values(data)
+      .sort((a, b) => b.active - a.active)
+      .slice(0, number);
 
-})
-}
+    renderCountries(sortedCountries);
+  });
+};
 
+const renderCountries = (sortedCountries) => {
+  const content = document.createElement("div");
+  content.className = "content";
+  document.body.appendChild(content);
 
-const renderCountries = (topCountries) => {
-    topCountries.forEach( (element, index) => {
-       const div = document.createElement('div')
-       let className = ""
-       if (index < 3) {
-           className = "danger"
-       } else if (index >= 3 && index < 6) {
-        className = "warning"
-       } else {
-           className = "primary"
-       }
-       div.innerHTML = `
+  sortedCountries.forEach((element, index) => {
+    const card = document.createElement("div");
+    if (index < 3) {
+      className = "danger";
+    } else if (index >= 3 && index < 6) {
+      className = "warning";
+    } else {
+      className = "primary";
+    }
+    card.innerHTML = `
        <div class="card text-white bg-${className} mb-3" style="max-width: 20rem;">
        <div class="card-header">${element.country}</div>
        <div class="card-body">
@@ -56,27 +44,24 @@ const renderCountries = (topCountries) => {
 
        </div>
      </div>
-       `
+       `;
+    content.appendChild(card);
+  });
+};
 
-        content.appendChild(div)
-    });
+// Modal
 
-}
+const openModal = (event) => {
+  getData(event.dataset.country).then((data) => renderModal(data));
+};
 
-// Modal 
+const renderModal = (object) => {
+  const overlay = document.createElement("div");
+  overlay.className = "overlay";
+  document.body.appendChild(overlay);
 
-function openModal(event) {
-    const response = getDataModal(event.dataset.country)
-    response.then( data => {
-        renderModal(data)
-    }
-    )
-}
-
-function renderModal(object) {
-    overlay.classList.add('active')
-    const modal = document.createElement('div')
-    modal.innerHTML = `
+  const modal = document.createElement("div");
+  modal.innerHTML = `
     <div class="modal-show"id="modal-dialog">
     <div class="modal-dialog" role="document">
     <div class="modal-content bg-info" >
@@ -99,17 +84,17 @@ function renderModal(object) {
     </div>
   </div>
   </div>
-    `
-    document.body.appendChild(modal)
-}
+    `;
+  document.body.appendChild(modal);
+};
 
-function closeModal(){
-    overlay.classList.remove('active')
-    const modalDialog = document.getElementById('modal-dialog')
-    modalDialog.parentElement.remove()
+const closeModal = () => {
+  const overlay = document.querySelector(".overlay");
+  overlay.remove();
+  const modalDialog = document.getElementById("modal-dialog");
+  modalDialog.parentElement.remove();
+};
 
-}
+// Display 15 countries
 
-// Initiate countries
-
-addEventListener('DOMContentLoaded', getCountries())
+addEventListener("DOMContentLoaded", getCountries(15));
