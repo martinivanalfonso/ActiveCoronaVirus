@@ -1,23 +1,23 @@
 // Fetching API
 const getData = async (country) => {
-  let link = "https://corona.lmao.ninja/countries/";
+  let link = "https://corona.lmao.ninja/v2/countries/";
   if (country) link += country;
-
-  const response = await fetch(link);
-  return response.json();
+  try {
+    const response = await fetch(link);
+    return response.json().then((data) => data);
+  } catch (error) {
+    console.log(error);
+  }
+  return;
 };
 
 // Countries
 
-const getCountries = (number) => {
-  if (!number) number = 15;
-  getData().then((data) => {
-    const sortedCountries = Object.values(data)
-      .sort((a, b) => b.active - a.active)
-      .slice(0, number);
-
-    renderCountries(sortedCountries);
-  });
+const getCountries = async (number = 15) => {
+  const sortedCountries = Object.values(await getData())
+    .sort((a, b) => b.active - a.active)
+    .slice(0, number);
+  renderCountries(sortedCountries);
 };
 
 const renderCountries = (sortedCountries) => {
